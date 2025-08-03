@@ -122,10 +122,51 @@ export const Header = () => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 marble-gradient border-b border-border/20 backdrop-blur-xl">
-      <div className="container mx-auto px-4">
-        {/* Top Section - Title and Menu */}
-        <div className="flex items-center justify-between py-3">
+    <header className="fixed top-0 left-0 right-0 z-50">
+      {/* Top Info Bar */}
+      <div className="bg-kuwait-green text-white py-2">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <DollarSign className="w-4 h-4" />
+                <span>1 USD = {exchangeRate} KD</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                <span>Kuwait Time: {kuwaitTime}</span>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleLanguage}
+                className="flex items-center gap-2 hover:bg-white/20 text-white hover:text-white"
+              >
+                <Globe className="w-4 h-4" />
+                <span>{isArabic ? "English" : "العربية"}</span>
+              </Button>
+              
+              <div className="hidden lg:flex items-center gap-2">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 hover:text-white">
+                  {isArabic ? "استثمر" : "Invest"}
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 hover:text-white">
+                  {isArabic ? "زر" : "Visit"}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Header */}
+      <div className="marble-gradient border-b border-border/20 backdrop-blur-xl">
+        <div className="container mx-auto px-4">
+          {/* Title and Menu */}
+          <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-8 relative">
               {/* Kuwait Flag */}
@@ -182,85 +223,63 @@ export const Header = () => {
           </Button>
         </div>
 
-        {/* Information Bar */}
-        <div className="flex items-center justify-between py-2 text-sm border-t border-border/10">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <DollarSign className="w-4 h-4" />
-              <span>1 USD = {exchangeRate} KD</span>
-            </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Clock className="w-4 h-4" />
-              <span>Kuwait Time: {kuwaitTime}</span>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleLanguage}
-              className="flex items-center gap-2 hover:bg-primary/10"
-            >
-              <Globe className="w-4 h-4" />
-              <span>{isArabic ? "English" : "العربية"}</span>
-            </Button>
-            
-            {/* CTA Buttons */}
-            <div className="hidden lg:flex items-center gap-4">
-              <Button variant="outline" size="sm" className="border-kuwait-green text-kuwait-green hover:bg-kuwait-green hover:text-white">
-                {isArabic ? "استثمر" : "Invest"}
-              </Button>
-              <Button size="sm" className="bg-kuwait-green hover:bg-primary-glow gold-shadow">
-                {isArabic ? "زر" : "Visit"}
-              </Button>
-            </div>
-          </div>
-        </div>
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="lg:hidden py-4 border-t border-border/10">
-            <nav className="flex flex-col gap-2">
-              {menuItems.map((item, index) => (
-                <DropdownMenu key={index}>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-between text-sm font-medium text-foreground hover:text-primary hover:bg-primary/10"
-                    >
-                      {item.name}
-                      <ChevronDown className="w-4 h-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-full min-w-[300px] bg-background/95 backdrop-blur-sm border border-border/20">
-                    {item.items.map((subItem, subIndex) => (
-                      <DropdownMenuItem
-                        key={subIndex}
-                        className="text-sm text-foreground hover:bg-primary/10 hover:text-primary cursor-pointer"
+            {/* Horizontal Scroll Navigation */}
+            <div className="overflow-x-auto scrollbar-hide">
+              <div className="flex gap-2 pb-4 min-w-max">
+                {menuItems.map((item, index) => (
+                  <DropdownMenu key={index}>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="whitespace-nowrap flex items-center gap-2 border-kuwait-green text-kuwait-green hover:bg-kuwait-green hover:text-white"
                       >
-                        {subItem}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ))}
-              <div className="flex gap-4 pt-4 border-t border-border/10">
-                <Button variant="outline" size="sm" className="flex-1 border-kuwait-green text-kuwait-green">
-                  {isArabic ? "استثمر" : "Invest"}
-                </Button>
-                <Button size="sm" className="flex-1 bg-kuwait-green hover:bg-primary-glow">
-                  {isArabic ? "زر" : "Visit"}
-                </Button>
+                        {item.name}
+                        <ChevronDown className="w-3 h-3" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-72 max-h-96 overflow-y-auto bg-background/95 backdrop-blur-sm border border-border/20">
+                      {item.items.map((subItem, subIndex) => (
+                        <DropdownMenuItem
+                          key={subIndex}
+                          className="text-sm text-foreground hover:bg-primary/10 hover:text-primary cursor-pointer"
+                        >
+                          {subItem}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ))}
               </div>
-            </nav>
+            </div>
+            {/* Mobile CTA Buttons */}
+            <div className="flex gap-3 mt-4 pt-4 border-t border-border/10">
+              <Button variant="outline" size="sm" className="flex-1 border-kuwait-green text-kuwait-green hover:bg-kuwait-green hover:text-white">
+                {isArabic ? "استثمر" : "Invest"}
+              </Button>
+              <Button size="sm" className="flex-1 bg-kuwait-green hover:bg-primary-glow">
+                {isArabic ? "زر" : "Visit"}
+              </Button>
+            </div>
           </div>
         )}
+        </div>
       </div>
       
       <style>{`
         .clip-triangle {
           clip-path: polygon(0 0, 100% 50%, 0 100%);
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
         }
       `}</style>
     </header>

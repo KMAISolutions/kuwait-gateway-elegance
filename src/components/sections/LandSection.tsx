@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Mountain, Waves, Thermometer, MapPin, Camera } from "lucide-react";
+import InteractiveMap from "@/components/InteractiveMap";
 
 export const LandSection = () => {
   const [activeTab, setActiveTab] = useState("geography");
@@ -136,24 +137,8 @@ export const LandSection = () => {
               </p>
             </div>
 
-            {/* Interactive Map Placeholder */}
-            <Card className="marble-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-kuwait-green" />
-                  Interactive Map View
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="aspect-video bg-gradient-to-br from-kuwait-green/20 to-gold/20 rounded-lg flex items-center justify-center text-muted-foreground">
-                  <div className="text-center">
-                    <Camera className="w-12 h-12 mx-auto mb-4 text-kuwait-green" />
-                    <p>Interactive terrain map loading...</p>
-                    <p className="text-sm mt-2">Click to explore Kuwait's geography</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Interactive Map */}
+            <InteractiveMap />
           </div>
 
           {/* Statistics */}
