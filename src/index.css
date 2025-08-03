@@ -1,42 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Kuwait Luxury Design System - Flag Colors & Marble Elegance */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    /* Kuwait Flag Colors */
+    --kuwait-green: 150 100% 23%; /* #007A3D */
+    --kuwait-red: 356 77% 41%; /* #B31B1B */
+    --kuwait-black: 0 0% 0%; /* #000000 */
+    --kuwait-white: 0 0% 100%; /* #FFFFFF */
+    
+    /* Luxury Palette */
+    --gold: 43 96% 65%; /* Metallic Gold */
+    --gold-light: 43 96% 75%;
+    --gold-dark: 43 96% 55%;
+    --marble: 40 8% 97%; /* White Marble */
+    --marble-accent: 40 12% 92%;
+    --pearl: 210 20% 98%;
+    
+    /* Semantic Design Tokens */
+    --background: var(--kuwait-white);
+    --foreground: var(--kuwait-black);
+    
+    --card: var(--pearl);
+    --card-foreground: var(--kuwait-black);
+    
+    --popover: var(--kuwait-white);
+    --popover-foreground: var(--kuwait-black);
+    
+    --primary: var(--kuwait-green);
+    --primary-foreground: var(--kuwait-white);
+    --primary-glow: 150 70% 35%;
+    
+    --secondary: var(--marble);
+    --secondary-foreground: var(--kuwait-black);
+    
+    --accent: var(--gold);
+    --accent-foreground: var(--kuwait-black);
+    
+    --muted: var(--marble-accent);
+    --muted-foreground: 0 0% 45%;
+    
+    --border: 40 12% 88%;
+    --input: var(--marble-accent);
+    --ring: var(--kuwait-green);
+    
+    --destructive: var(--kuwait-red);
+    --destructive-foreground: var(--kuwait-white);
+    
+    /* Luxury Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(var(--kuwait-green)) 0%, hsl(var(--kuwait-green) / 0.8) 50%, hsl(var(--gold) / 0.2) 100%);
+    --gradient-marble: linear-gradient(145deg, hsl(var(--marble)) 0%, hsl(var(--pearl)) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(var(--gold-dark)) 0%, hsl(var(--gold)) 50%, hsl(var(--gold-light)) 100%);
+    
+    /* Shadows & Effects */
+    --shadow-luxury: 0 25px 50px -12px hsl(var(--kuwait-black) / 0.15);
+    --shadow-gold: 0 8px 32px hsl(var(--gold) / 0.3);
+    --shadow-marble: 0 4px 20px hsl(var(--kuwait-black) / 0.08);
+    
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -94,12 +120,127 @@ All colors MUST be HSL.
   }
 }
 
+}
+
 @layer base {
   * {
     @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-playfair;
+  }
+}
+
+@layer components {
+  /* Kuwait Luxury Components */
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+  
+  .marble-gradient {
+    background: var(--gradient-marble);
+  }
+  
+  .gold-gradient {
+    background: var(--gradient-gold);
+  }
+  
+  .luxury-shadow {
+    box-shadow: var(--shadow-luxury);
+  }
+  
+  .gold-shadow {
+    box-shadow: var(--shadow-gold);
+  }
+  
+  .marble-shadow {
+    box-shadow: var(--shadow-marble);
+  }
+  
+  /* Animations */
+  .fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+  
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .shimmer {
+    animation: shimmer 2.5s linear infinite;
+  }
+  
+  /* Arabic Typography Support */
+  .rtl {
+    direction: rtl;
+  }
+  
+  .ltr {
+    direction: ltr;
+  }
+}
+
+@layer utilities {
+  /* Custom Utilities */
+  .text-gradient-gold {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .text-kuwait-green {
+    color: hsl(var(--kuwait-green));
+  }
+  
+  .text-kuwait-red {
+    color: hsl(var(--kuwait-red));
+  }
+  
+  .bg-kuwait-green {
+    background-color: hsl(var(--kuwait-green));
+  }
+  
+  .bg-kuwait-red {
+    background-color: hsl(var(--kuwait-red));
+  }
+  
+  .border-kuwait-green {
+    border-color: hsl(var(--kuwait-green));
+  }
+}
+
+/* Keyframe Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
   }
 }

@@ -18,6 +18,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				playfair: ['Playfair Display', 'serif'],
+				inter: ['Inter', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -26,7 +30,8 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					glow: 'hsl(var(--primary-glow))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -61,7 +66,24 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Kuwait Flag & Luxury Colors
+				kuwait: {
+					green: 'hsl(var(--kuwait-green))',
+					red: 'hsl(var(--kuwait-red))',
+					black: 'hsl(var(--kuwait-black))',
+					white: 'hsl(var(--kuwait-white))'
+				},
+				gold: {
+					DEFAULT: 'hsl(var(--gold))',
+					light: 'hsl(var(--gold-light))',
+					dark: 'hsl(var(--gold-dark))'
+				},
+				marble: {
+					DEFAULT: 'hsl(var(--marble))',
+					accent: 'hsl(var(--marble-accent))'
+				},
+				pearl: 'hsl(var(--pearl))'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
