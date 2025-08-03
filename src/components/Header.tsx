@@ -1,7 +1,22 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Globe, Clock, DollarSign, Menu, X } from "lucide-react";
+import { Globe, Clock, DollarSign, Menu, X, ChevronDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,87 +38,138 @@ export const Header = () => {
     });
   };
 
-  const navigation = [
-    { name: isArabic ? "الأرض" : "Land", href: "#land" },
-    { name: isArabic ? "الشعب" : "People", href: "#people" },
-    { name: isArabic ? "الاقتصاد" : "Economy", href: "#economy" },
-    { name: isArabic ? "الحكومة" : "Government", href: "#government" },
-    { name: isArabic ? "الثقافة" : "Culture", href: "#culture" },
-    { name: isArabic ? "التاريخ" : "History", href: "#history" },
+  const menuItems = [
+    {
+      name: isArabic ? "الأرض" : "Land",
+      items: [
+        "Geography & Location",
+        "Climate & Seasons", 
+        "Islands & Coastal Areas",
+        "Natural Reserves & Wildlife",
+        "Interactive Map & 3D Terrain"
+      ]
+    },
+    {
+      name: isArabic ? "الشعب" : "People",
+      items: [
+        "Demographics & Ethnic Groups",
+        "Religion & Language",
+        "Lifestyle & Social Norms", 
+        "Education & Literacy",
+        "Famous Kuwaitis & Public Figures"
+      ]
+    },
+    {
+      name: isArabic ? "الاقتصاد" : "Economy",
+      items: [
+        "Oil & Gas Sector",
+        "Banking & Financial Services",
+        "Tourism & Hospitality",
+        "Trade, Import & Export Statistics", 
+        "Investment & Free Trade Zones"
+      ]
+    },
+    {
+      name: isArabic ? "الحكومة والمجتمع" : "Government & Society",
+      items: [
+        "Political System & Leadership",
+        "Ministries & Key Institutions",
+        "Law, Justice & Security",
+        "Visa & Residency Information",
+        "Social Programs & Public Services"
+      ]
+    },
+    {
+      name: isArabic ? "الثقافة" : "Cultural Life", 
+      items: [
+        "Arts & Architecture",
+        "Traditional Cuisine & Dining Guide",
+        "Fashion & Modern Lifestyle",
+        "Festivals, Holidays & Events",
+        "Music, Dance & Entertainment"
+      ]
+    },
+    {
+      name: isArabic ? "التاريخ" : "History",
+      items: [
+        "Ancient Kuwait & Early Settlements",
+        "Maritime & Trade Heritage", 
+        "Colonial & Modern Era",
+        "Independence & State Formation",
+        "Interactive Historical Timeline"
+      ]
+    },
+    {
+      name: isArabic ? "المراجع وتاريخ التحرير" : "References & Edit History",
+      items: [
+        "Source Citations & Bibliography",
+        "Contributor Credits",
+        "Article Revision Logs",
+        "External Links & Resources", 
+        "Academic & Tourism References"
+      ]
+    },
+    {
+      name: isArabic ? "الحقائق والإحصائيات" : "Facts & Stats",
+      items: [
+        "Population & Demographic Figures",
+        "Economic Indicators & GDP Stats",
+        "Land Area & Geography Quick Facts",
+        "Tourism & Visitor Statistics",
+        "Fun Facts & Records"
+      ]
+    }
   ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 marble-gradient border-b border-border/20 backdrop-blur-xl">
       <div className="container mx-auto px-4">
-        {/* Top Info Bar */}
-        <div className="flex items-center justify-between py-2 text-sm border-b border-border/10">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <DollarSign className="w-4 h-4" />
-              <span>1 USD = {exchangeRate} KD</span>
+        {/* Top Section - Title and Menu */}
+        <div className="flex items-center justify-between py-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-8 relative">
+              {/* Kuwait Flag */}
+              <div className="absolute inset-0 bg-kuwait-green"></div>
+              <div className="absolute top-0 right-0 w-6 h-8 bg-kuwait-white"></div>
+              <div className="absolute top-2.5 right-0 w-6 h-1 bg-kuwait-red"></div>
+              <div className="absolute top-0 left-0 w-3 h-8 bg-kuwait-black clip-triangle"></div>
             </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Clock className="w-4 h-4" />
-              <span>Kuwait Time: {kuwaitTime}</span>
-            </div>
-          </div>
-          
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleLanguage}
-            className="flex items-center gap-2 hover:bg-primary/10"
-          >
-            <Globe className="w-4 h-4" />
-            <span>{isArabic ? "English" : "العربية"}</span>
-          </Button>
-        </div>
-
-        {/* Main Navigation */}
-        <div className="flex items-center justify-between py-4">
-          <div className="flex items-center gap-8">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-8 relative">
-                {/* Kuwait Flag */}
-                <div className="absolute inset-0 bg-kuwait-green"></div>
-                <div className="absolute top-0 right-0 w-6 h-8 bg-kuwait-white"></div>
-                <div className="absolute top-2.5 right-0 w-6 h-1 bg-kuwait-red"></div>
-                <div className="absolute top-0 left-0 w-3 h-8 bg-kuwait-black clip-triangle"></div>
-              </div>
-              <div>
-                <h1 className="text-xl font-playfair font-bold text-kuwait-green">
-                  {isArabic ? "دولة الكويت" : "State of Kuwait"}
-                </h1>
-                <p className="text-xs text-muted-foreground">
-                  {isArabic ? "البوابة الرسمية" : "Official Portal"}
-                </p>
-              </div>
+            <div>
+              <h1 className="text-xl font-playfair font-bold text-kuwait-green">
+                {isArabic ? "دولة الكويت" : "State of Kuwait"}
+              </h1>
+              <p className="text-xs text-muted-foreground">
+                {isArabic ? "البوابة الرسمية" : "Official Portal"}
+              </p>
             </div>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8">
-            {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors relative group"
-              >
-                {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
-              </a>
-            ))}
+          <nav className="hidden lg:flex items-center">
+            <NavigationMenu>
+              <NavigationMenuList className="gap-1">
+                {menuItems.map((item, index) => (
+                  <NavigationMenuItem key={index}>
+                    <NavigationMenuTrigger className="text-sm font-medium text-foreground hover:text-primary transition-colors bg-transparent hover:bg-primary/10 data-[state=open]:bg-primary/10">
+                      {item.name}
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent className="min-w-[300px] p-2 bg-background/95 backdrop-blur-sm border border-border/20">
+                      <div className="grid gap-1">
+                        {item.items.map((subItem, subIndex) => (
+                          <NavigationMenuLink
+                            key={subIndex}
+                            className="block px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors cursor-pointer"
+                          >
+                            {subItem}
+                          </NavigationMenuLink>
+                        ))}
+                      </div>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
           </nav>
-
-          {/* CTA Buttons */}
-          <div className="hidden lg:flex items-center gap-4">
-            <Button variant="outline" size="sm" className="border-kuwait-green text-kuwait-green hover:bg-kuwait-green hover:text-white">
-              {isArabic ? "استثمر" : "Invest"}
-            </Button>
-            <Button size="sm" className="bg-kuwait-green hover:bg-primary-glow gold-shadow">
-              {isArabic ? "زر" : "Visit"}
-            </Button>
-          </div>
 
           {/* Mobile Menu Button */}
           <Button
@@ -116,19 +182,68 @@ export const Header = () => {
           </Button>
         </div>
 
+        {/* Information Bar */}
+        <div className="flex items-center justify-between py-2 text-sm border-t border-border/10">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <DollarSign className="w-4 h-4" />
+              <span>1 USD = {exchangeRate} KD</span>
+            </div>
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Clock className="w-4 h-4" />
+              <span>Kuwait Time: {kuwaitTime}</span>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleLanguage}
+              className="flex items-center gap-2 hover:bg-primary/10"
+            >
+              <Globe className="w-4 h-4" />
+              <span>{isArabic ? "English" : "العربية"}</span>
+            </Button>
+            
+            {/* CTA Buttons */}
+            <div className="hidden lg:flex items-center gap-4">
+              <Button variant="outline" size="sm" className="border-kuwait-green text-kuwait-green hover:bg-kuwait-green hover:text-white">
+                {isArabic ? "استثمر" : "Invest"}
+              </Button>
+              <Button size="sm" className="bg-kuwait-green hover:bg-primary-glow gold-shadow">
+                {isArabic ? "زر" : "Visit"}
+              </Button>
+            </div>
+          </div>
+        </div>
+
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="lg:hidden py-4 border-t border-border/10">
-            <nav className="flex flex-col gap-4">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-sm font-medium text-foreground hover:text-primary transition-colors py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </a>
+            <nav className="flex flex-col gap-2">
+              {menuItems.map((item, index) => (
+                <DropdownMenu key={index}>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-between text-sm font-medium text-foreground hover:text-primary hover:bg-primary/10"
+                    >
+                      {item.name}
+                      <ChevronDown className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-full min-w-[300px] bg-background/95 backdrop-blur-sm border border-border/20">
+                    {item.items.map((subItem, subIndex) => (
+                      <DropdownMenuItem
+                        key={subIndex}
+                        className="text-sm text-foreground hover:bg-primary/10 hover:text-primary cursor-pointer"
+                      >
+                        {subItem}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ))}
               <div className="flex gap-4 pt-4 border-t border-border/10">
                 <Button variant="outline" size="sm" className="flex-1 border-kuwait-green text-kuwait-green">
