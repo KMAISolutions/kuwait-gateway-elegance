@@ -109,8 +109,10 @@ export const LandSection = () => {
               }`}
             >
               <tab.icon className="w-4 h-4" />
-              <span className="hidden sm:inline">{tab.label}</span>
-              <span className="text-xs opacity-70">• {tab.arabic}</span>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
+                <span>{tab.label}</span>
+                <span className="text-xs opacity-70">• {tab.arabic}</span>
+              </div>
             </Button>
           ))}
         </div>
