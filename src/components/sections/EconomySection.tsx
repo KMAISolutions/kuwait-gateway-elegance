@@ -2,296 +2,583 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Building2, Ship, Plane, DollarSign, BarChart3 } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Progress } from "@/components/ui/progress";
+import { 
+  TrendingUp, 
+  Building2, 
+  Plane, 
+  BarChart3, 
+  DollarSign,
+  MapPin,
+  Factory,
+  Users
+} from "lucide-react";
+import { 
+  PieChart, 
+  Pie, 
+  Cell, 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  Area,
+  AreaChart
+} from "recharts";
 
 export const EconomySection = () => {
-  const [activeMetric, setActiveMetric] = useState("oil");
+  const [activeTab, setActiveTab] = useState("oil-gas");
 
-  const economicSectors = [
+  const oilReservesData = [
+    { name: "Kuwait", value: 102, color: "#2D5A3D" },
+    { name: "Saudi Arabia", value: 297, color: "#4A7C59" },
+    { name: "Iran", value: 208, color: "#8B5A2B" },
+    { name: "Iraq", value: 145, color: "#A0A0A0" },
+    { name: "Others", value: 500, color: "#D4D4AA" }
+  ];
+
+  const economicGrowthData = [
+    { year: "2019", gdp: 134.6, oilPrice: 64 },
+    { year: "2020", gdp: 105.9, oilPrice: 42 },
+    { year: "2021", gdp: 124.3, oilPrice: 71 },
+    { year: "2022", gdp: 175.4, oilPrice: 95 },
+    { year: "2023", gdp: 162.9, oilPrice: 82 },
+    { year: "2024", gdp: 158.7, oilPrice: 75 }
+  ];
+
+  const sectorContribution = [
+    { sector: "Oil & Gas", value: 50, budget: 90 },
+    { sector: "Financial Services", value: 15, budget: 5 },
+    { sector: "Trade & Commerce", value: 12, budget: 2 },
+    { sector: "Construction", value: 8, budget: 1 },
+    { sector: "Manufacturing", value: 6, budget: 1 },
+    { sector: "Tourism", value: 3, budget: 1 },
+    { sector: "Others", value: 6, budget: 0 }
+  ];
+
+  const investmentProjects = [
+    { name: "Infrastructure", amount: 27.6, foreign: 10.2, domestic: 17.4 },
+    { name: "Energy", amount: 15.8, foreign: 8.9, domestic: 6.9 },
+    { name: "Petrochemicals", amount: 8.4, foreign: 3.2, domestic: 5.2 },
+    { name: "Water & Utilities", amount: 6.8, foreign: 2.1, domestic: 4.7 },
+    { name: "Logistics", amount: 4.6, foreign: 1.8, domestic: 2.8 }
+  ];
+
+  const tabs = [
     {
-      id: "oil",
+      id: "oil-gas",
+      label: "Oil & Gas",
+      icon: Factory,
       title: "Oil & Gas Sector",
-      arabic: "قطاع النفط والغاز",
-      icon: TrendingUp,
-      percentage: "90%",
-      description: "Kuwait holds approximately 10% of the world's proven oil reserves",
-      stats: [
-        { label: "Oil Reserves", value: "101.5 billion barrels", change: "+2.3%" },
-        { label: "Daily Production", value: "2.7 million bpd", change: "+1.8%" },
-        { label: "Export Revenue", value: "$65.2 billion", change: "+5.2%" },
-        { label: "OPEC Ranking", value: "#4 Producer", change: "Stable" },
-      ]
+      description: "The backbone of Kuwait's economy with massive reserves and production capacity"
     },
     {
       id: "finance",
-      title: "Financial Services",
-      arabic: "الخدمات المالية",
+      label: "Banking & Finance",
       icon: Building2,
-      percentage: "25%",
-      description: "Kuwait Investment Authority manages one of the world's largest sovereign wealth funds",
-      stats: [
-        { label: "Sovereign Wealth", value: "$700+ billion", change: "+3.1%" },
-        { label: "Banking Assets", value: "$180 billion", change: "+2.7%" },
-        { label: "Stock Market Cap", value: "$140 billion", change: "+4.5%" },
-        { label: "Islamic Finance", value: "30% of sector", change: "+6.2%" },
-      ]
-    },
-    {
-      id: "trade",
-      title: "Port & Trade",
-      arabic: "التجارة والموانئ",
-      icon: Ship,
-      percentage: "15%",
-      description: "Strategic location connecting Asia, Europe, and Africa through maritime trade",
-      stats: [
-        { label: "Port Throughput", value: "2.1 million TEU", change: "+8.4%" },
-        { label: "Trade Volume", value: "$95 billion", change: "+4.1%" },
-        { label: "Free Zones", value: "5 Active Zones", change: "+2 New" },
-        { label: "Re-export Hub", value: "40% of GCC", change: "+3.8%" },
-      ]
+      title: "Banking & Financial Services",
+      description: "Sophisticated financial sector with the world's largest sovereign wealth fund"
     },
     {
       id: "tourism",
-      title: "Tourism & Hospitality",
-      arabic: "السياحة والضيافة",
+      label: "Tourism",
       icon: Plane,
-      percentage: "8%",
-      description: "Growing sector focused on cultural heritage and business tourism",
-      stats: [
-        { label: "Annual Visitors", value: "1.8 million", change: "+12.5%" },
-        { label: "Hotel Occupancy", value: "78%", change: "+5.3%" },
-        { label: "Tourism Revenue", value: "$2.1 billion", change: "+15.2%" },
-        { label: "Heritage Sites", value: "12 Registered", change: "+2 New" },
-      ]
+      title: "Tourism & Hospitality",
+      description: "Growing tourism sector with world-class cultural attractions and infrastructure"
+    },
+    {
+      id: "trade",
+      label: "Trade & Investment",
+      icon: BarChart3,
+      title: "Trade, Import & Export Statistics",
+      description: "Strategic trade hub with major investment initiatives and free zones"
+    },
+    {
+      id: "investment",
+      label: "Investment Zones",
+      icon: MapPin,
+      title: "Investment & Free Trade Zones",
+      description: "Special economic zones and major infrastructure projects attracting global investment"
     }
   ];
 
-  const currentSector = economicSectors.find(sector => sector.id === activeMetric) || economicSectors[0];
+  const currentTab = tabs.find(tab => tab.id === activeTab) || tabs[0];
 
   return (
-    <section id="economy" className="py-20 bg-gradient-to-b from-marble to-background">
+    <section id="economy" className="py-20 bg-gradient-to-b from-background to-marble">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4 text-kuwait-green border-kuwait-green">
-            الاقتصاد • Economy
+            اقتصاد • Economy
           </Badge>
           <h2 className="text-4xl md:text-5xl font-playfair font-bold text-foreground mb-4">
-            Economic Powerhouse
+            Kuwait's Economy
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Discover Kuwait's diversified economy, from energy leadership to financial innovation
+            Discover Kuwait's diversified economy, from oil wealth to financial services and emerging sectors
           </p>
         </div>
 
-        {/* Economic Overview Cards */}
-        <div className="grid md:grid-cols-4 gap-6 mb-16">
-          <Card className="text-center hover:scale-105 transition-transform duration-300 marble-shadow">
-            <CardContent className="p-6">
-              <DollarSign className="w-12 h-12 text-kuwait-green mx-auto mb-4" />
-              <div className="text-3xl font-bold text-foreground mb-2">$200.5B</div>
-              <div className="text-sm text-muted-foreground">Total GDP</div>
-              <div className="text-xs text-kuwait-green mt-1">+3.2% YoY</div>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center hover:scale-105 transition-transform duration-300 marble-shadow">
-            <CardContent className="p-6">
-              <TrendingUp className="w-12 h-12 text-gold mx-auto mb-4" />
-              <div className="text-3xl font-bold text-foreground mb-2">$41,320</div>
-              <div className="text-sm text-muted-foreground">GDP per Capita</div>
-              <div className="text-xs text-kuwait-green mt-1">High Income</div>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center hover:scale-105 transition-transform duration-300 marble-shadow">
-            <CardContent className="p-6">
-              <BarChart3 className="w-12 h-12 text-kuwait-red mx-auto mb-4" />
-              <div className="text-3xl font-bold text-foreground mb-2">10%</div>
-              <div className="text-sm text-muted-foreground">World Oil Reserves</div>
-              <div className="text-xs text-kuwait-green mt-1">101.5B barrels</div>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center hover:scale-105 transition-transform duration-300 marble-shadow">
-            <CardContent className="p-6">
-              <Building2 className="w-12 h-12 text-primary mx-auto mb-4" />
-              <div className="text-3xl font-bold text-foreground mb-2">$700B+</div>
-              <div className="text-sm text-muted-foreground">Sovereign Wealth</div>
-              <div className="text-xs text-kuwait-green mt-1">Global Top 5</div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Sector Navigation */}
+        {/* Navigation Tabs */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {economicSectors.map((sector) => (
-            <Button
-              key={sector.id}
-              variant={activeMetric === sector.id ? "default" : "outline"}
-              onClick={() => setActiveMetric(sector.id)}
-              className={`flex items-center gap-2 px-6 py-3 ${
-                activeMetric === sector.id
-                  ? "bg-kuwait-green hover:bg-primary-glow text-white"
-                  : "border-kuwait-green text-kuwait-green hover:bg-kuwait-green hover:text-white"
-              }`}
-            >
-              <sector.icon className="w-4 h-4" />
-              <span className="hidden sm:inline">{sector.title}</span>
-              <Badge variant="secondary" className="ml-2">
-                {sector.percentage}
-              </Badge>
-            </Button>
-          ))}
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <Button
+                key={tab.id}
+                variant={activeTab === tab.id ? "default" : "outline"}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-6 py-3 ${
+                  activeTab === tab.id
+                    ? "bg-kuwait-green hover:bg-primary-glow text-white"
+                    : "border-kuwait-green text-kuwait-green hover:bg-kuwait-green hover:text-white"
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                <span>{tab.label}</span>
+              </Button>
+            );
+          })}
         </div>
 
-        {/* Detailed Sector View */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        {/* Content Area */}
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            <Card className="marble-shadow">
-              <CardHeader>
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-full bg-kuwait-green/10">
-                    <currentSector.icon className="w-8 h-8 text-kuwait-green" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-2xl font-playfair">
-                      {currentSector.title}
-                    </CardTitle>
-                    <p className="text-muted-foreground font-arabic">
-                      {currentSector.arabic}
-                    </p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-lg leading-relaxed mb-6">
-                  {currentSector.description}
-                </p>
+          <div className="space-y-8">
+            <div>
+              <h3 className="text-3xl font-playfair font-bold text-foreground mb-2">
+                {currentTab.title}
+              </h3>
+              <p className="text-lg text-muted-foreground mb-4">
+                {currentTab.description}
+              </p>
+            </div>
 
-                {/* Statistics Grid */}
-                <div className="grid md:grid-cols-2 gap-4">
-                  {currentSector.stats.map((stat, index) => (
-                    <div
-                      key={index}
-                      className="p-4 rounded-lg bg-gradient-to-br from-kuwait-green/5 to-gold/5 border border-kuwait-green/20"
-                    >
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <p className="text-sm text-muted-foreground">{stat.label}</p>
-                          <p className="text-xl font-bold text-foreground">{stat.value}</p>
+            {activeTab === "oil-gas" && (
+              <div className="space-y-8">
+                <div className="grid md:grid-cols-2 gap-8">
+                  <Card className="border-kuwait-green/20">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Factory className="w-5 h-5 text-kuwait-green" />
+                        Global Oil Reserves
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ResponsiveContainer width="100%" height={300}>
+                        <PieChart>
+                          <Pie
+                            data={oilReservesData}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            label={({name, value}) => `${name}: ${value}B barrels`}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                          >
+                            {oilReservesData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-kuwait-green/20">
+                    <CardHeader>
+                      <CardTitle>Oil Sector Statistics</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Metric</TableHead>
+                            <TableHead>Value</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell className="font-medium">Proven Reserves</TableCell>
+                            <TableCell className="text-kuwait-green font-bold">102B barrels</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">Global Share</TableCell>
+                            <TableCell className="text-kuwait-green font-bold">~6%</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">Export Share</TableCell>
+                            <TableCell className="text-kuwait-green font-bold">~95%</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">Government Revenue</TableCell>
+                            <TableCell className="text-kuwait-green font-bold">~90%</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">GDP Contribution</TableCell>
+                            <TableCell className="text-kuwait-green font-bold">50%+</TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "finance" && (
+              <div className="space-y-8">
+                <div className="grid md:grid-cols-2 gap-8">
+                  <Card className="border-kuwait-green/20">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Building2 className="w-5 h-5 text-kuwait-green" />
+                        Economic Indicators
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ResponsiveContainer width="100%" height={300}>
+                        <AreaChart data={economicGrowthData}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="year" />
+                          <YAxis />
+                          <Tooltip />
+                          <Area 
+                            type="monotone" 
+                            dataKey="gdp" 
+                            stroke="#2D5A3D" 
+                            fill="#2D5A3D" 
+                            fillOpacity={0.3}
+                            name="GDP (Billion USD)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-kuwait-green/20">
+                    <CardHeader>
+                      <CardTitle>Financial Highlights</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center p-3 bg-kuwait-green/10 rounded-md">
+                          <span className="font-medium">GDP per Capita</span>
+                          <span className="text-kuwait-green font-bold">$32,290</span>
                         </div>
-                        <div className="text-right">
-                          <Badge variant="outline" className="text-kuwait-green border-kuwait-green">
-                            {stat.change}
-                          </Badge>
+                        <div className="flex justify-between items-center p-3 bg-kuwait-green/10 rounded-md">
+                          <span className="font-medium">Sovereign Wealth Fund</span>
+                          <span className="text-kuwait-green font-bold">$970B</span>
+                        </div>
+                        <div className="flex justify-between items-center p-3 bg-kuwait-green/10 rounded-md">
+                          <span className="font-medium">Current Account Surplus</span>
+                          <span className="text-kuwait-green font-bold">30% of GDP</span>
+                        </div>
+                        <div className="flex justify-between items-center p-3 bg-kuwait-green/10 rounded-md">
+                          <span className="font-medium">Credit Rating</span>
+                          <span className="text-kuwait-green font-bold">A+ Stable</span>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    </CardContent>
+                  </Card>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            )}
 
-            {/* Investment Opportunities */}
-            <Card className="bg-gradient-to-br from-kuwait-green/10 to-gold/10 border-kuwait-green/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-kuwait-green" />
-                  Investment Opportunities
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-kuwait-green mb-2">15+</div>
-                    <p className="text-sm text-muted-foreground">Free Zones</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-kuwait-green mb-2">100%</div>
-                    <p className="text-sm text-muted-foreground">Foreign Ownership</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-kuwait-green mb-2">0%</div>
-                    <p className="text-sm text-muted-foreground">Corporate Tax</p>
-                  </div>
+            {activeTab === "tourism" && (
+              <div className="space-y-8">
+                <div className="grid md:grid-cols-2 gap-8">
+                  <Card className="border-kuwait-green/20">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Plane className="w-5 h-5 text-kuwait-green" />
+                        Tourism Revenue Growth
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div>
+                          <div className="flex justify-between mb-2">
+                            <span className="text-sm">Domestic Tourism 2023</span>
+                            <span className="text-sm text-kuwait-green font-bold">KD 4.39B</span>
+                          </div>
+                          <Progress value={92} className="h-2" />
+                          <p className="text-xs text-muted-foreground mt-1">+9.2% vs 2022</p>
+                        </div>
+                        <div>
+                          <div className="flex justify-between mb-2">
+                            <span className="text-sm">Foreign Tourism 2023</span>
+                            <span className="text-sm text-kuwait-green font-bold">KD 533M</span>
+                          </div>
+                          <Progress value={60} className="h-2" />
+                          <p className="text-xs text-muted-foreground mt-1">+60% growth</p>
+                        </div>
+                        <div>
+                          <div className="flex justify-between mb-2">
+                            <span className="text-sm">Cultural Investment</span>
+                            <span className="text-sm text-kuwait-green font-bold">$1B+</span>
+                          </div>
+                          <Progress value={100} className="h-2" />
+                          <p className="text-xs text-muted-foreground mt-1">National Cultural District</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-kuwait-green/20">
+                    <CardHeader>
+                      <CardTitle>Tourism Attractions</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-4">
+                        <div className="flex items-start gap-3 p-3 bg-kuwait-green/10 rounded-md">
+                          <Building2 className="w-5 h-5 text-kuwait-green mt-0.5" />
+                          <div>
+                            <h4 className="font-semibold">Kuwait Towers</h4>
+                            <p className="text-sm text-muted-foreground">Iconic symbol of modern Kuwait</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3 p-3 bg-kuwait-green/10 rounded-md">
+                          <Building2 className="w-5 h-5 text-kuwait-green mt-0.5" />
+                          <div>
+                            <h4 className="font-semibold">Al-Hamra Tower</h4>
+                            <p className="text-sm text-muted-foreground">Tallest building in Kuwait</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3 p-3 bg-kuwait-green/10 rounded-md">
+                          <Building2 className="w-5 h-5 text-kuwait-green mt-0.5" />
+                          <div>
+                            <h4 className="font-semibold">Grand Mosque</h4>
+                            <p className="text-sm text-muted-foreground">Largest mosque in Kuwait</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3 p-3 bg-kuwait-green/10 rounded-md">
+                          <Building2 className="w-5 h-5 text-kuwait-green mt-0.5" />
+                          <div>
+                            <h4 className="font-semibold">Cultural District</h4>
+                            <p className="text-sm text-muted-foreground">World's largest museum complex</p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-                <Button className="w-full mt-6 bg-kuwait-green hover:bg-primary-glow">
-                  Download Investment Guide
-                </Button>
-              </CardContent>
-            </Card>
+              </div>
+            )}
+
+            {activeTab === "trade" && (
+              <div className="space-y-8">
+                <div className="grid md:grid-cols-2 gap-8">
+                  <Card className="border-kuwait-green/20">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <BarChart3 className="w-5 h-5 text-kuwait-green" />
+                        Economic Sector Contribution
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={sectorContribution}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="sector" angle={-45} textAnchor="end" height={80} />
+                          <YAxis />
+                          <Tooltip />
+                          <Bar dataKey="value" fill="#2D5A3D" name="GDP %" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-kuwait-green/20">
+                    <CardHeader>
+                      <CardTitle>Trade Statistics</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Category</TableHead>
+                            <TableHead>Share</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell className="font-medium">Oil Exports</TableCell>
+                            <TableCell className="text-kuwait-green font-bold">95%</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">Petrochemicals</TableCell>
+                            <TableCell className="text-kuwait-green font-bold">3%</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">Other Exports</TableCell>
+                            <TableCell className="text-kuwait-green font-bold">2%</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">Import Dependency</TableCell>
+                            <TableCell className="text-kuwait-green font-bold">High</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">Trading Partners</TableCell>
+                            <TableCell className="text-kuwait-green font-bold">Global</TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "investment" && (
+              <div className="space-y-8">
+                <div className="grid md:grid-cols-2 gap-8">
+                  <Card className="border-kuwait-green/20">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <MapPin className="w-5 h-5 text-kuwait-green" />
+                        Investment Projects 2023
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={investmentProjects}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
+                          <YAxis />
+                          <Tooltip />
+                          <Bar dataKey="foreign" fill="#2D5A3D" name="Foreign Investment (B USD)" />
+                          <Bar dataKey="domestic" fill="#4A7C59" name="Domestic Investment (B USD)" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-kuwait-green/20">
+                    <CardHeader>
+                      <CardTitle>Investment Zones</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-4">
+                        <div className="flex items-start gap-3 p-3 bg-kuwait-green/10 rounded-md">
+                          <MapPin className="w-5 h-5 text-kuwait-green mt-0.5" />
+                          <div>
+                            <h4 className="font-semibold">Shuwaikh Free Zone</h4>
+                            <p className="text-sm text-muted-foreground">Established 1999, duty & tax exemptions</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3 p-3 bg-kuwait-green/10 rounded-md">
+                          <Factory className="w-5 h-5 text-kuwait-green mt-0.5" />
+                          <div>
+                            <h4 className="font-semibold">Infrastructure Pipeline</h4>
+                            <p className="text-sm text-muted-foreground">$27.6B worth of projects</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3 p-3 bg-kuwait-green/10 rounded-md">
+                          <DollarSign className="w-5 h-5 text-kuwait-green mt-0.5" />
+                          <div>
+                            <h4 className="font-semibold">Foreign Investment</h4>
+                            <p className="text-sm text-muted-foreground">$10.2B in 2023</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3 p-3 bg-kuwait-green/10 rounded-md">
+                          <TrendingUp className="w-5 h-5 text-kuwait-green mt-0.5" />
+                          <div>
+                            <h4 className="font-semibold">Vision 2035</h4>
+                            <p className="text-sm text-muted-foreground">Economic diversification plan</p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Sidebar */}
+          {/* Statistics Sidebar */}
           <div className="space-y-6">
-            {/* Market Data */}
-            <Card className="marble-shadow">
-              <CardHeader>
-                <CardTitle className="text-lg">Live Market Data</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between items-center p-3 rounded bg-kuwait-green/5">
-                  <span className="text-sm">Oil Price (Brent)</span>
-                  <span className="font-bold text-kuwait-green">$82.45</span>
-                </div>
-                <div className="flex justify-between items-center p-3 rounded bg-gold/5">
-                  <span className="text-sm">USD/KWD</span>
-                  <span className="font-bold text-gold-dark">0.308</span>
-                </div>
-                <div className="flex justify-between items-center p-3 rounded bg-kuwait-red/5">
-                  <span className="text-sm">Boursa Kuwait</span>
-                  <span className="font-bold text-kuwait-red">7,234.5</span>
-                </div>
-              </CardContent>
-            </Card>
+            <h4 className="text-2xl font-playfair font-bold text-foreground">
+              Key Economic Indicators
+            </h4>
+            <div className="grid gap-4">
+              <Card className="hover:scale-105 transition-transform duration-300 marble-shadow">
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h5 className="font-semibold text-foreground mb-1">
+                        Total GDP
+                      </h5>
+                      <p className="text-sm text-muted-foreground">
+                        2024 estimate
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-kuwait-green">
+                        $158.7B
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="hover:scale-105 transition-transform duration-300 marble-shadow">
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h5 className="font-semibold text-foreground mb-1">
+                        Oil Reserves
+                      </h5>
+                      <p className="text-sm text-muted-foreground">
+                        Proven reserves
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-kuwait-green">
+                        102B bbls
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
-            {/* Key Sectors */}
-            <Card className="marble-shadow">
-              <CardHeader>
-                <CardTitle className="text-lg">Key Economic Indicators</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span>Oil Revenue</span>
-                    <span>90%</span>
+              <Card className="hover:scale-105 transition-transform duration-300 marble-shadow">
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h5 className="font-semibold text-foreground mb-1">
+                        Sovereign Wealth
+                      </h5>
+                      <p className="text-sm text-muted-foreground">
+                        World's largest fund
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-kuwait-green">
+                        $970B
+                      </div>
+                    </div>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-kuwait-green h-2 rounded-full" style={{ width: '90%' }}></div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span>Financial Services</span>
-                    <span>25%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-gold h-2 rounded-full" style={{ width: '25%' }}></div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span>Trade & Logistics</span>
-                    <span>15%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-kuwait-red h-2 rounded-full" style={{ width: '15%' }}></div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
 
-            {/* Quick Actions */}
-            <Card className="bg-gradient-to-br from-kuwait-green to-primary-glow text-white">
-              <CardContent className="p-6 text-center">
-                <h3 className="text-lg font-bold mb-4">Ready to Invest?</h3>
-                <p className="text-sm mb-4 opacity-90">
-                  Explore business opportunities in Kuwait's thriving economy
+            {/* Additional Info Card */}
+            <Card className="bg-gradient-to-br from-kuwait-green/5 to-gold/5 border-kuwait-green/20">
+              <CardHeader>
+                <CardTitle className="text-kuwait-green">Did You Know?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm">
+                  Kuwait's sovereign wealth fund is worth nearly $970 billion, making it the largest in the world relative to GDP and one of the oldest, established in 1953.
                 </p>
-                <Button variant="secondary" className="w-full">
-                  Contact Investment Office
-                </Button>
               </CardContent>
             </Card>
           </div>

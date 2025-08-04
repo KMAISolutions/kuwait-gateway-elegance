@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { 
   Users, 
@@ -140,31 +140,43 @@ export const PeopleSection = () => {
           </p>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5 mb-8 bg-white/50 backdrop-blur-sm">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              return (
-                <TabsTrigger
-                  key={tab.id}
-                  value={tab.id}
-                  className="flex items-center gap-2 data-[state=active]:bg-kuwait-green data-[state=active]:text-white"
-                >
-                  <Icon className="w-4 h-4" />
-                  <span className="hidden sm:inline">{tab.label}</span>
-                </TabsTrigger>
-              );
-            })}
-          </TabsList>
+        {/* Navigation Tabs */}
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <Button
+                key={tab.id}
+                variant={activeTab === tab.id ? "default" : "outline"}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-6 py-3 ${
+                  activeTab === tab.id
+                    ? "bg-kuwait-green hover:bg-primary-glow text-white"
+                    : "border-kuwait-green text-kuwait-green hover:bg-kuwait-green hover:text-white"
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                <span>{tab.label}</span>
+              </Button>
+            );
+          })}
+        </div>
 
-          {/* Demographics Tab */}
-          <TabsContent value="demographics" className="space-y-8">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-playfair font-bold text-kuwait-green mb-2">
+        {/* Content Area */}
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          {/* Main Content */}
+          <div className="space-y-8">
+            <div>
+              <h3 className="text-3xl font-playfair font-bold text-foreground mb-2">
                 {currentTab.title}
               </h3>
-              <p className="text-muted-foreground">{currentTab.description}</p>
+              <p className="text-lg text-muted-foreground mb-4">
+                {currentTab.description}
+              </p>
             </div>
+
+            {activeTab === "demographics" && (
+              <div className="space-y-8">
 
             <div className="grid md:grid-cols-2 gap-8">
               <Card className="border-kuwait-green/20">
@@ -238,16 +250,11 @@ export const PeopleSection = () => {
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
+              </div>
+            )}
 
-          {/* Religion & Language Tab */}
-          <TabsContent value="religion" className="space-y-8">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-playfair font-bold text-kuwait-green mb-2">
-                Religious & Linguistic Diversity
-              </h3>
-              <p className="text-muted-foreground">Faith traditions and languages that shape Kuwaiti society</p>
-            </div>
+            {activeTab === "religion" && (
+              <div className="space-y-8">
 
             <div className="grid md:grid-cols-2 gap-8">
               <Card className="border-kuwait-green/20">
@@ -313,16 +320,11 @@ export const PeopleSection = () => {
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
+              </div>
+            )}
 
-          {/* Lifestyle Tab */}
-          <TabsContent value="lifestyle" className="space-y-8">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-playfair font-bold text-kuwait-green mb-2">
-                Modern Kuwaiti Society
-              </h3>
-              <p className="text-muted-foreground">Progressive values, family traditions, and contemporary lifestyle</p>
-            </div>
+            {activeTab === "lifestyle" && (
+              <div className="space-y-8">
 
             <div className="grid md:grid-cols-2 gap-8">
               <Card className="border-kuwait-green/20">
@@ -386,16 +388,11 @@ export const PeopleSection = () => {
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
+              </div>
+            )}
 
-          {/* Education Tab */}
-          <TabsContent value="education" className="space-y-8">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-playfair font-bold text-kuwait-green mb-2">
-                Educational Excellence
-              </h3>
-              <p className="text-muted-foreground">World-class education system driving national development</p>
-            </div>
+            {activeTab === "education" && (
+              <div className="space-y-8">
 
             <div className="grid md:grid-cols-2 gap-8">
               <Card className="border-kuwait-green/20">
@@ -464,16 +461,11 @@ export const PeopleSection = () => {
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
+              </div>
+            )}
 
-          {/* Famous Kuwaitis Tab */}
-          <TabsContent value="famous" className="space-y-8">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-playfair font-bold text-kuwait-green mb-2">
-                Notable Public Figures
-              </h3>
-              <p className="text-muted-foreground">Distinguished Kuwaitis making impact on the global stage</p>
-            </div>
+            {activeTab === "famous" && (
+              <div className="space-y-8">
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {famousFigures.map((figure, index) => {
@@ -547,8 +539,90 @@ export const PeopleSection = () => {
                 </Table>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
+              </div>
+            )}
+          </div>
+
+          {/* Statistics Sidebar */}
+          <div className="space-y-6">
+            <h4 className="text-2xl font-playfair font-bold text-foreground">
+              Key Statistics
+            </h4>
+            <div className="grid gap-4">
+              <Card className="hover:scale-105 transition-transform duration-300 marble-shadow">
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h5 className="font-semibold text-foreground mb-1">
+                        Total Population
+                      </h5>
+                      <p className="text-sm text-muted-foreground">
+                        As of 2024
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-kuwait-green">
+                        4.93M
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="hover:scale-105 transition-transform duration-300 marble-shadow">
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h5 className="font-semibold text-foreground mb-1">
+                        Literacy Rate
+                      </h5>
+                      <p className="text-sm text-muted-foreground">
+                        Among highest globally
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-kuwait-green">
+                        97.2%
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:scale-105 transition-transform duration-300 marble-shadow">
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h5 className="font-semibold text-foreground mb-1">
+                        Expatriate Population
+                      </h5>
+                      <p className="text-sm text-muted-foreground">
+                        International residents
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-kuwait-green">
+                        70%
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Additional Info Card */}
+            <Card className="bg-gradient-to-br from-kuwait-green/5 to-gold/5 border-kuwait-green/20">
+              <CardHeader>
+                <CardTitle className="text-kuwait-green">Did You Know?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm">
+                  Kuwait has one of the highest literacy rates in the Middle East and is known for its progressive stance on women's education and workforce participation.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </section>
   );
