@@ -227,16 +227,16 @@ export const Header = () => {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="lg:hidden py-4 border-t border-border/10">
-            {/* Horizontal Scroll Navigation */}
-            <div className="overflow-x-auto scrollbar-hide">
-              <div className="flex gap-2 pb-4 min-w-max">
+            {/* Vertical Menu with Scroller */}
+            <div className="max-h-96 overflow-y-auto scrollbar-hide">
+              <div className="flex flex-col gap-2">
                 {menuItems.map((item, index) => (
                   <DropdownMenu key={index}>
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="outline"
                         size="sm"
-                        className="whitespace-nowrap flex items-center gap-2 border-kuwait-green text-kuwait-green hover:bg-kuwait-green hover:text-white"
+                        className="w-full justify-between flex items-center gap-2 border-kuwait-green text-kuwait-green hover:bg-kuwait-green hover:text-white"
                       >
                         {item.name}
                         <ChevronDown className="w-3 h-3" />
